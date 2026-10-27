@@ -11,7 +11,7 @@ function App() {
   const mapData: MapData = westbankMap;
 
   const handleSearch = () => {
-    const result = bfs(mapData, "Bethlehem", "Jericho");
+    const result = bfs(mapData, "Nablus", "Hebron");
 
     console.log(result);
   };
