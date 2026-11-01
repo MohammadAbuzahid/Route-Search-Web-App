@@ -5,6 +5,8 @@ Fundamentals of Artificial Intelligence - Assignment 1
 ## Group Members
 - Name: Mohammad Abu Zahid
   ID: 12028572
+- Name: Asmaa
+  ID:12028661
 
 
 ## Project Description
