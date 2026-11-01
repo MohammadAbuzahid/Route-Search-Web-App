@@ -1,12 +1,14 @@
 import type {MapData} from "../types/map"
+import type { SearchResult } from "../types/search";
 
-export function bfs(MapData : MapData, start: string, goal: string){
+export function bfs(MapData : MapData, start: string, goal: string): SearchResult {
 
     const chelldren:string[] = [start];
     const visited = new Set<string>();
     const parent = new Map<string, string | null>();
     const path: string[] = [];
     let countPath = 0 ;
+    let steps = 0;
 
     let city: string | null = goal;
 
@@ -15,6 +17,7 @@ export function bfs(MapData : MapData, start: string, goal: string){
 
     while(chelldren.length > 0){
         const current  = chelldren.shift()!;
+        steps++;
         if(current  === goal){
             while (city !== null) {
                 path.push(city);
@@ -65,4 +68,5 @@ export function bfs(MapData : MapData, start: string, goal: string){
     console.log("parent: ", parent);
     console.log("path: ", path);
     console.log("cost =", countPath);
+    return { path, cost: path.length ? countPath : Infinity, steps };
 }
