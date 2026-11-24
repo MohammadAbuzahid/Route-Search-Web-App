@@ -2,10 +2,10 @@ import type { MapData } from './types/map'
 
 export const algorithms = [
   { id: 'bfs', name: 'Breadth-first search', label: 'BFS', ready: true },
-  { id: 'dfs', name: 'Depth-first search', label: 'DFS', ready: false },
+  { id: 'dfs', name: 'Depth-first search', label: 'DFS', ready: true },
   { id: 'ucs', name: 'Uniform-cost search', label: 'UCS', ready: true },
-  { id: 'greedy', name: 'Greedy best-first', label: 'Greedy', ready: false },
-  { id: 'astar', name: 'A* search', label: 'A*', ready: false },
+  { id: 'greedy', name: 'Greedy best-first', label: 'Greedy', ready: true },
+  { id: 'astar', name: 'A* search', label: 'A*', ready: true },
 ] as const
 export type Result = { id: string; path: string[]; cost?: number; steps?: number; error?: string }
 
