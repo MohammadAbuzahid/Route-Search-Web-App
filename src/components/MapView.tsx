@@ -1,0 +1,10 @@
+import type { MapData } from '../types/map'
+type Props = { map: MapData; start: string; goal: string; path: string[] }
+export default function MapView({ map, start, goal, path }: Props) {
+  const xs = map.cities.map(city => city.x), ys = map.cities.map(city => city.y)
+  const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys)
+  const scale = Math.min(440 / (maxX - minX || 1), 420 / (maxY - minY || 1))
+  const points = new Map(map.cities.map(city => [city.name, { x: 350 + (city.x - (minX + maxX) / 2) * scale, y: 265 - (city.y - (minY + maxY) / 2) * scale }]))
+  const isPath = (a: string, b: string) => path.some((city, i) => i > 0 && ((city === a && path[i - 1] === b) || (city === b && path[i - 1] === a)))
+  return <div className="map-canvas"><svg viewBox="0 0 700 530" role="img" aria-label={`Road network for ${map.name}. Start ${start}, destination ${goal}. ${path.length ? `Route: ${path.join(' to ')}` : 'No route selected.'}`}><defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#d9e5e0" /></pattern></defs><rect width="700" height="530" fill="url(#grid)" /><text x="655" y="38" className="compass">N</text><path d="M661 49 v25 m-5 -18 5 -7 5 7" fill="none" stroke="#83958d" />{map.roads.map((road, i) => { const a = points.get(road.from)!, b = points.get(road.to)!; return <g key={i}><line x1={a.x} y1={a.y} x2={b.x} y2={b.y} className={isPath(road.from, road.to) ? 'road selected-road' : 'road'} /><text x={(a.x+b.x)/2} y={(a.y+b.y)/2-5} className="road-label">{road.km}</text></g> })}{map.cities.map(city => { const p = points.get(city.name)!; return <g key={city.name}><title>{city.name} ({city.x}, {city.y})</title>{(city.name === start || city.name === goal) && <circle cx={p.x} cy={p.y} r="14" fill={city.name === start ? '#d3efe4' : '#ffead0'} />}<circle cx={p.x} cy={p.y} r="6" className={city.name === start ? 'city start-city' : city.name === goal ? 'city goal-city' : 'city'} /><text x={p.x+12} y={p.y+4} className="city-label">{city.name}</text></g> })}</svg></div>
+}

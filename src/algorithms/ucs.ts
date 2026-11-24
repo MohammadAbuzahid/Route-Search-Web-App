@@ -1,4 +1,5 @@
 import type { MapData } from "../types/map";
+import type { SearchResult } from "../types/search";
 
 type UCSNode = {
     city: string;
@@ -10,7 +11,10 @@ export function ucs(
     MapData: MapData,
     start: string,
     goal: string
-) {
+): SearchResult {
+
+    const expanded = new Set<string>();
+    let steps = 0;
 
     const frontier: UCSNode[] = [
         {
@@ -29,13 +33,18 @@ export function ucs(
             return node1.city.localeCompare(node2.city);
         });
         const current = frontier.shift()!;
+        // Ignore duplicate frontier entries; count each processed city once.
+        if (expanded.has(current.city)) continue;
+        expanded.add(current.city);
+        steps++;
         console.log("Current city:", current.city);
         console.log("Current cost:", current.cost);
         console.log("Current path:", current.path);
         if (current.city === goal) {
             return {
                 path: current.path,
-                cost: current.cost
+                cost: current.cost,
+                steps
             };
         }
         const roads = MapData.roads.filter(
@@ -49,6 +58,7 @@ export function ucs(
                 road.from === current.city
                     ? road.to
                     : road.from;
+            if (expanded.has(child)) continue;
             const newCost = current.cost + road.km;
             frontier.push({
                 city: child,
@@ -60,6 +70,7 @@ export function ucs(
 
     return {
         path: [],
-        cost: Infinity
+        cost: Infinity,
+        steps
     };
 }
